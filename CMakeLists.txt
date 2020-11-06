@@ -3,7 +3,7 @@ project(cell)
 
 find_package(OpenGL REQUIRED)
 
-set (CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 11)
 
 include_directories(. ${GLFW3_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
 
@@ -12,7 +12,12 @@ add_subdirectory(vendor/glfw)
 
 add_definitions(-DNOMINMAX)
 
-add_library(cell STATIC
+if(NOT WIN32)
+  set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+endif()
+
+add_library(
+  cell STATIC
   cell/camera/camera_frustum.cpp
   cell/camera/camera.cpp
   cell/camera/fly_camera.cpp
@@ -48,39 +53,39 @@ add_library(cell STATIC
   cell/shading/texture_cube.cpp
   cell/shading/Texture.cpp
   cell/stb/stb_image.cpp
-  cell/cell.cpp
-)
+  cell/cell.cpp)
 
-add_library(mathl STATIC
-  math/geometry/plane.cpp
-  math/trigonometry/spherical.cpp
-  math/trigonometry/polar.cpp
-)
+add_library(
+  mathl STATIC math/geometry/plane.cpp math/trigonometry/spherical.cpp
+               math/trigonometry/polar.cpp)
 
-add_library(utility STATIC
-  utility/logging/log.cpp
-  utility/random/random.cpp
-  utility/timing/time.cpp
-)
+add_library(utility STATIC utility/logging/log.cpp utility/random/random.cpp
+                           utility/timing/time.cpp)
 
-add_executable(demo
-  demo/scenes/pbr_test.cpp
-  demo/program.cpp
-)
+add_executable(demo demo/scenes/pbr_test.cpp demo/program.cpp)
 
 target_link_libraries(utility mathl)
 target_link_libraries(cell PUBLIC mathl utility assimp)
 target_link_libraries(demo PUBLIC cell assimp glfw)
-target_include_directories(cell PUBLIC lib/includes vendor/assimp/include vendor/glfw/include)
+target_include_directories(cell PUBLIC lib/includes vendor/assimp/include
+                                       vendor/glfw/include)
 
-add_custom_command(TARGET demo POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy_directory
-                       ${CMAKE_SOURCE_DIR}/build/ $<TARGET_FILE_DIR:demo>)
-                       
-add_custom_command(TARGET demo POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy
-                       $<TARGET_FILE:assimp> $<TARGET_FILE_DIR:demo>)
+add_custom_command(
+  TARGET demo
+  POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/build/
+          $<TARGET_FILE_DIR:demo>)
 
-add_custom_command(TARGET demo POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy
-                       $<TARGET_FILE:glfw> $<TARGET_FILE_DIR:demo>)
+if(WIN32)
+  add_custom_command(
+    TARGET demo
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:assimp>
+            $<TARGET_FILE_DIR:demo>)
+
+  add_custom_command(
+    TARGET demo
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:glfw>
+            $<TARGET_FILE_DIR:demo>)
+endif()

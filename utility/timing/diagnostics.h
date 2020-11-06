@@ -3,10 +3,14 @@
 
 #include <iostream>
 #include <string>
-// #include <intrin.h>
+
+#ifdef _WIN32
+#include <intrin.h>
+#else
+#include <x86intrin.h>
+#endif
 
 #include "../std_types.h"
-
 
 #define CLOCK(name) diagnostics::clock clock##name(#name)
 
@@ -38,26 +42,27 @@ namespace diagnostics
     */
     class clock
     {
-    private:
+      private:
         std::string m_Name;
         u64         m_StartClock;
-    public:
+
+      public:
         clock(std::string name)
         {
-            m_Name = name;
+            m_Name       = name;
             m_StartClock = (u64)__rdtsc();
         }
 
         ~clock()
         {
             u64 endClock = (u64)__rdtsc();
-            u64 delta = endClock - m_StartClock;
-            // NOTE(Joey): clock is mostly used for internal time diagnosis, so for ease of use I simply 
+            u64 delta    = endClock - m_StartClock;
+            // NOTE(Joey): clock is mostly used for internal time diagnosis, so for ease of use I simply
             // directly set my CPU's clock speed (requesting this requires OS specific calls). If you want
             // to diagnose your own syste, simply replace the value below with your own CPU's clock speed
             // or use something like windows' QueryPerformanceFrequency to retrieve the clock speed.
             const u32 clockSpeed = 3400000000;
-            float clockTime = (float)delta / (float)clockSpeed * 1000.0f;
+            float     clockTime  = (float)delta / (float)clockSpeed * 1000.0f;
             std::cout << m_Name << ":  " << delta << " cycles | " << clockTime << " ms" << std::endl;
             // TODO(Joey): store in global performance table for later analysis
         }
