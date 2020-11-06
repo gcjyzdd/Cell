@@ -72,3 +72,15 @@ target_link_libraries(utility mathl)
 target_link_libraries(cell PUBLIC mathl utility assimp)
 target_link_libraries(demo PUBLIC cell assimp glfw)
 target_include_directories(cell PUBLIC lib/includes vendor/assimp/include vendor/glfw/include)
+
+add_custom_command(TARGET demo POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory
+                       ${CMAKE_SOURCE_DIR}/build/ $<TARGET_FILE_DIR:demo>)
+                       
+add_custom_command(TARGET demo POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy
+                       $<TARGET_FILE:assimp> $<TARGET_FILE_DIR:demo>)
+
+add_custom_command(TARGET demo POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy
+                       $<TARGET_FILE:glfw> $<TARGET_FILE_DIR:demo>)
