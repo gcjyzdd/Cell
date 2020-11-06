@@ -7,8 +7,8 @@ set(CMAKE_CXX_STANDARD 11)
 
 include_directories(. ${GLFW3_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
 
-add_subdirectory(vendor/assimp)
-add_subdirectory(vendor/glfw)
+add_subdirectory(vendor/assimp EXCLUDE_FROM_ALL)
+add_subdirectory(vendor/glfw EXCLUDE_FROM_ALL)
 
 add_definitions(-DNOMINMAX)
 
