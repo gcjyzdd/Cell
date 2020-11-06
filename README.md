@@ -1,3 +1,20 @@
+# NOTES
+
+This project is forked from another repository. The purpose of the fork is to build the repo on windows(probably linux later).
+
+[jbehley](https://github.com/jbehley/Cell) updated the repo from [JoeyDeVries](https://github.com/JoeyDeVries/Cell) to use CMake. However, it still does not work for me.
+
+## Build on Windows
+
+With VS 2017:
+
+``` sh
+mkdir bbuild
+cd bbuild
+cmake -G "Visual Studio 15 2017 Win64" ..
+cmake --build .
+```
+
 Cell - Graphics engine
 ======
 Welcome to the development repository of Cell, an open-source OpenGL graphics engine aimed to serve as an educational repository 
