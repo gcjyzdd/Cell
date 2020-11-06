@@ -1,8 +1,10 @@
 # NOTES
 
-This project is forked from another repository. The purpose of the fork is to build the repo on windows(probably linux later).
+This project is forked from another repository. The purpose of the fork is to build the repo on windows and linux.
 
-[jbehley](https://github.com/jbehley/Cell) updated the repo from [JoeyDeVries](https://github.com/JoeyDeVries/Cell) to use CMake. However, it still does not work for me.
+[jbehley](https://github.com/jbehley/Cell) updated the repo from [JoeyDeVries](https://github.com/JoeyDeVries/Cell) to use CMake. However, it still does not work.
+
+To compile the repo out of the box, I added `glfw` as a submodule. So there is no `find_package(glfw)` (which is not working properly and not easy to set the hint path correctly on different platforms) any more.
 
 ## Build on Windows
 
@@ -15,7 +17,18 @@ cmake -G "Visual Studio 15 2017 Win64" ..
 cmake --build .
 ```
 
-Then start `demo.exe` and you should see something like the following image:
+then start `demo.exe`.
+
+## Build on Linux
+
+With gcc:
+
+``` sh
+mkdir bbuild && cd bbuild
+make -j
+```
+
+To start the demo just run `./demo` and you should see something like the following image(on Ubuntu16 with `gcc7`):
 
 ![sponza](./exampleSponza.png)
 
