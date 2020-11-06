@@ -1,8 +1,6 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.13)
 project(cell)
 
-
-find_package(glfw3 REQUIRED)
 find_package(OpenGL REQUIRED)
 
 set (CMAKE_CXX_STANDARD 11)
@@ -10,8 +8,11 @@ set (CMAKE_CXX_STANDARD 11)
 include_directories(. ${GLFW3_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
 
 add_subdirectory(vendor/assimp)
+add_subdirectory(vendor/glfw)
 
-add_library(cell
+add_definitions(-DNOMINMAX)
+
+add_library(cell STATIC
   cell/camera/camera_frustum.cpp
   cell/camera/camera.cpp
   cell/camera/fly_camera.cpp
@@ -50,13 +51,13 @@ add_library(cell
   cell/cell.cpp
 )
 
-add_library(math
+add_library(mathl STATIC
   math/geometry/plane.cpp
   math/trigonometry/spherical.cpp
   math/trigonometry/polar.cpp
 )
 
-add_library(utility
+add_library(utility STATIC
   utility/logging/log.cpp
   utility/random/random.cpp
   utility/timing/time.cpp
@@ -67,6 +68,7 @@ add_executable(demo
   demo/program.cpp
 )
 
-target_link_libraries(utility math)
-target_link_libraries(cell math utility)
-target_link_libraries(demo cell assimp ${GLFW3_LIBRARY} ${OPENGL_LIBRARY})
+target_link_libraries(utility mathl)
+target_link_libraries(cell PUBLIC mathl utility assimp)
+target_link_libraries(demo PUBLIC cell assimp glfw)
+target_include_directories(cell PUBLIC lib/includes vendor/assimp/include)
