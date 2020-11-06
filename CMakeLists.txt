@@ -71,4 +71,4 @@ add_executable(demo
 target_link_libraries(utility mathl)
 target_link_libraries(cell PUBLIC mathl utility assimp)
 target_link_libraries(demo PUBLIC cell assimp glfw)
-target_include_directories(cell PUBLIC lib/includes vendor/assimp/include)
+target_include_directories(cell PUBLIC lib/includes vendor/assimp/include vendor/glfw/include)
