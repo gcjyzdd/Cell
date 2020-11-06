@@ -15,6 +15,12 @@ cmake -G "Visual Studio 15 2017 Win64" ..
 cmake --build .
 ```
 
+Then start `demo.exe` and you should see something like the following image:
+
+![sponza](./exampleSponza.png)
+
+# Below is the original README
+
 Cell - Graphics engine
 ======
 Welcome to the development repository of Cell, an open-source OpenGL graphics engine aimed to serve as an educational repository 
